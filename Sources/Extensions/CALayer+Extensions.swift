@@ -38,12 +38,14 @@ extension CALayer {
         return sublayers?.filter { $0.name == CALayer.skeletonSubLayersName } ?? [CALayer]()
     }
     
-    func addMultilinesLayers(lines: Int, type: SkeletonType, lastLineFillPercent: Int, multilineCornerRadius: Int) {
-        let numberOfSublayers = calculateNumLines(maxLines: lines)
+    func addMultilinesLayers(lines: Int, type: SkeletonType, lastLineFillPercent: Int, multilineCornerRadius: Int, multilineSpacing: CGFloat, topPadding: CGFloat) {
+        let numberOfSublayers = calculateNumLines(maxLines: lines, multilineSpacing: multilineSpacing, topPadding: topPadding)
 
         let layerBuilder = SkeletonMultilineLayerBuilder()
             .setSkeletonType(type)
             .setCornerRadius(multilineCornerRadius)
+            .setMultilineSpacing(multilineSpacing)
+            .setTopPadding(topPadding)
 
         (0..<numberOfSublayers).forEach { index in
             var width = getLineWidth(index: index, numberOfSublayers: numberOfSublayers, lastLineFillPercent: lastLineFillPercent)
@@ -60,12 +62,12 @@ extension CALayer {
         }
     }
     
-    func updateMultilinesLayers(lastLineFillPercent: Int) {
+    func updateMultilinesLayers(lastLineFillPercent: Int, multilineSpacing: CGFloat, topPadding: CGFloat) {
         let currentSkeletonSublayers = skeletonSublayers
         let numberOfSublayers = currentSkeletonSublayers.count
         for (index, layer) in currentSkeletonSublayers.enumerated() {
             let width = getLineWidth(index: index, numberOfSublayers: numberOfSublayers, lastLineFillPercent: lastLineFillPercent)
-            layer.updateLayerFrame(for: index, width: width)
+            layer.updateLayerFrame(for: index, width: width, multilineSpacing: multilineSpacing, topPadding: topPadding)
         }
     }
 
@@ -78,14 +80,14 @@ extension CALayer {
         return width
     }
 
-    func updateLayerFrame(for index: Int, width: CGFloat) {
-        let spaceRequiredForEachLine = SkeletonAppearance.default.multilineHeight + SkeletonAppearance.default.multilineSpacing
-        frame = CGRect(x: 0.0, y: CGFloat(index) * spaceRequiredForEachLine, width: width, height: SkeletonAppearance.default.multilineHeight)
+    func updateLayerFrame(for index: Int, width: CGFloat, multilineSpacing: CGFloat, topPadding: CGFloat) {
+        let spaceRequiredForEachLine = SkeletonAppearance.default.multilineHeight + multilineSpacing
+        frame = CGRect(x: 0.0, y: CGFloat(index) * spaceRequiredForEachLine + topPadding, width: width, height: SkeletonAppearance.default.multilineHeight)
     }
 
-    private func calculateNumLines(maxLines: Int) -> Int {
-        let spaceRequitedForEachLine = SkeletonAppearance.default.multilineHeight + SkeletonAppearance.default.multilineSpacing
-        var numberOfSublayers = Int(round(CGFloat(bounds.height)/CGFloat(spaceRequitedForEachLine)))
+    private func calculateNumLines(maxLines: Int, multilineSpacing: CGFloat, topPadding: CGFloat) -> Int {
+        let spaceRequitedForEachLine = SkeletonAppearance.default.multilineHeight + multilineSpacing
+        var numberOfSublayers = Int(round(CGFloat(bounds.height - topPadding)/CGFloat(spaceRequitedForEachLine)))
         if maxLines != 0,  maxLines <= numberOfSublayers { numberOfSublayers = maxLines }
         return numberOfSublayers
     }

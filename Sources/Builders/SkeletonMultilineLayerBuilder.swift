@@ -10,6 +10,8 @@ class SkeletonMultilineLayerBuilder {
     var index: Int?
     var width: CGFloat?
     var cornerRadius: Int?
+    var multilineSpacing: CGFloat = SkeletonAppearance.default.multilineSpacing
+    var topPadding: CGFloat = 0.0
 
     func setSkeletonType(_ type: SkeletonType) -> SkeletonMultilineLayerBuilder {
         self.skeletonType = type
@@ -31,6 +33,16 @@ class SkeletonMultilineLayerBuilder {
         return self
     }
 
+    func setMultilineSpacing(_ spacing: CGFloat) -> SkeletonMultilineLayerBuilder {
+        self.multilineSpacing = spacing
+        return self
+    }
+
+    func setTopPadding(_ padding: CGFloat) -> SkeletonMultilineLayerBuilder {
+        self.topPadding = padding
+        return self
+    }
+
     func build() -> CALayer? {
         guard let type = skeletonType,
               let index = index,
@@ -41,7 +53,7 @@ class SkeletonMultilineLayerBuilder {
         let layer = type.layer
         layer.anchorPoint = .zero
         layer.name = CALayer.skeletonSubLayersName
-        layer.updateLayerFrame(for: index, width: width)
+        layer.updateLayerFrame(for: index, width: width, multilineSpacing: self.multilineSpacing, topPadding: topPadding)
 
         layer.cornerRadius = CGFloat(radius)
         layer.masksToBounds = true

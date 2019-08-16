@@ -73,12 +73,12 @@ struct SkeletonLayer {
     
     func addMultilinesIfNeeded() {
         guard let multiLineView = holder as? ContainsMultilineText else { return }
-        maskLayer.addMultilinesLayers(lines: multiLineView.numLines, type: type, lastLineFillPercent: multiLineView.lastLineFillingPercent, multilineCornerRadius: multiLineView.multilineCornerRadius)
+        maskLayer.addMultilinesLayers(lines: multiLineView.numLines, type: type, lastLineFillPercent: multiLineView.lastLineFillingPercent, multilineCornerRadius: multiLineView.multilineCornerRadius, multilineSpacing: multiLineView.multilineSpacing, topPadding: multiLineView.topPadding)
     }
 
     func updateMultilinesIfNeeded() {
         guard let multiLineView = holder as? ContainsMultilineText else { return }
-        maskLayer.updateMultilinesLayers(lastLineFillPercent: multiLineView.lastLineFillingPercent)
+        maskLayer.updateMultilinesLayers(lastLineFillPercent: multiLineView.lastLineFillingPercent, multilineSpacing: multiLineView.multilineSpacing, topPadding: multiLineView.topPadding)
     }
 }
 
