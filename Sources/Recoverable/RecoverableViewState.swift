@@ -14,7 +14,7 @@ struct RecoverableViewState {
     var clipToBounds: Bool
     
     // UI text
-    var text: String?
+    var attributedText: NSAttributedString?
     
     // UI image
     var image: UIImage?

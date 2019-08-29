@@ -40,24 +40,24 @@ extension UIView: Recoverable {
 extension UILabel {
     override func saveViewState() {
         super.saveViewState()
-        viewState?.text = text
+        viewState?.attributedText = attributedText
     }
     
     override func recoverViewState(forced: Bool) {
         super.recoverViewState(forced: forced)
-        text = text == " " || forced ? viewState?.text : text
+        attributedText = attributedText?.string == " " || forced ? viewState?.attributedText : attributedText
     }
 }
 
 extension UITextView {
     override func saveViewState() {
         super.saveViewState()
-        viewState?.text = text
+        viewState?.attributedText = attributedText
     }
     
     override func recoverViewState(forced: Bool) {
         super.recoverViewState(forced: forced)
-        text = text == " " || forced ? viewState?.text : text
+        attributedText = attributedText.string == " " || forced ? viewState?.attributedText : attributedText
     }
 }
 
