@@ -105,9 +105,8 @@ extension UIView {
     }
 
     func updateSkeleton(skeletonConfig config: SkeletonConfig) {
-        guard let flowDelegate = flowDelegate else { return }
         skeletonIsAnimated = config.animated
-        flowDelegate.willBeginUpdatingSkeletons(withRootView: self)
+        flowDelegate?.willBeginUpdatingSkeletons(withRootView: self)
         recursiveUpdateSkeleton(skeletonConfig: config, root: self)
     }
 
